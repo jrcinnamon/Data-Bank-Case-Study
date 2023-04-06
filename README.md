@@ -42,10 +42,18 @@ This table stores all customer deposits, withdrawals and purchases made using th
 ## Case Study Questions and Answers
 ### A. Customer Nodes Exploration
 1. How many unique nodes are there on the Data Bank system?
-2. What is the number of nodes per region?
-3. How many customers are allocated to each region?
-4. How many days on average are customers reallocated to a different node?
-5. What is the median, 80th and 95th percentile for this same reallocation days metric for each region?
+```sql
+SELECT DISTINCT node_id AS unique_nodes
+FROM customer_nodes;
+```
+#### Answer:
+
+
+2. What is the number of distinct nodes and customers per region?
+
+3. How many days on average are customers reallocated to a different node?
+
+4. What is the median, 80th, and 95th percentile for this same reallocation days metric for each region?
 
 ### B. Customer Transactions
 1. What is the unique count and total amount for each transaction type?

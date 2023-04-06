@@ -1,5 +1,5 @@
 # Data-Bank-Case-Study
-This case study was provided by Danny Ma, which can be found [here](https://8weeksqlchallenge.com/case-study-4/). Below is a description of the case study and my answers to the provided questions. I utilized PostgreSQL (pgAdmin 4) for this case study.
+This case study was created by Danny Ma and can be found [here](https://8weeksqlchallenge.com/case-study-4/). Below is a description of the case study and my answers to the provided questions using PostgreSQL (pgAdmin 4).
 ## Introduction
 There is a new innovation in the financial industry called Neo-Banks: new aged digital only banks without physical branches.
 

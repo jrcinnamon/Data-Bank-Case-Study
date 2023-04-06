@@ -18,14 +18,14 @@ The Data Bank team have prepared a data model for this case study as well as a f
 
 ![Screenshot of Entity Relationship Diagram](https://8weeksqlchallenge.com/images/case-study-4-erd.png)
 
-## Table 1: Regions
+### Table 1: Regions
 Just like popular cryptocurrency platforms - Data Bank is also run off a network of nodes where both money and data is stored across the globe. In a traditional banking sense - you can think of these nodes as bank branches or stores that exist around the world.
 
 This regions table contains the region_id and their respective region_name values
 
 ![regions table summary](https://user-images.githubusercontent.com/129814364/229970861-a5f64012-9f4b-4b1a-9b2b-d71b7886bef6.JPG)
 
-## Table 2: Customer Nodes
+### Table 2: Customer Nodes
 Customers are randomly distributed across the nodes according to their region - this also specifies exactly which node contains both their cash and data.
 
 This random distribution changes frequently to reduce the risk of hackers getting into Data Bank’s system and stealing customer’s money and data!
@@ -34,20 +34,20 @@ Below is a sample of the top 10 rows of the data_bank.customer_nodes
 
 ![customer nodes table summary](https://user-images.githubusercontent.com/129814364/229971006-f4ff8239-e5b7-4c46-b427-7ed6041ce90e.JPG)
 
-## Table 3: Customer Transactions
+### Table 3: Customer Transactions
 This table stores all customer deposits, withdrawals and purchases made using their Data Bank debit card.
 
 ![customer transactions table summary](https://user-images.githubusercontent.com/129814364/229971128-756f660c-c481-44a8-90a2-6b0cdfc26029.JPG)
 
 ## Case Study Questions and Answers
-## A. Customer Nodes Exploration
+### A. Customer Nodes Exploration
 1. How many unique nodes are there on the Data Bank system?
 2. What is the number of nodes per region?
 3. How many customers are allocated to each region?
 4. How many days on average are customers reallocated to a different node?
 5. What is the median, 80th and 95th percentile for this same reallocation days metric for each region?
 
-## B. Customer Transactions
+### B. Customer Transactions
 1. What is the unique count and total amount for each transaction type?
 2. What is the average total historical deposit counts and amounts for all customers?
 3. For each month - how many Data Bank customers make more than 1 deposit and either 1 purchase or 1 withdrawal in a single month?

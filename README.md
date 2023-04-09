@@ -105,9 +105,77 @@ FROM customer_transactions
 GROUP BY txn_type;
 ```
 #### Answer:
+![B1 Answer](https://user-images.githubusercontent.com/129814364/230789097-f4a4a76d-d7b0-4437-b2d6-6d218185655b.JPG)
+2. What is the average total historical deposit counts and amounts for all customers?
+```sql
+SELECT ROUND(AVG(deposit_count), 2) AS avg_total_deposit_count, ROUND(AVG(deposit_amt), 2) AS avg_total_deposits
+FROM (SELECT customer_id, COUNT(txn_type) AS deposit_count, SUM(txn_amount) AS deposit_amt
+FROM customer_transactions
+WHERE txn_type = 'deposit'
+GROUP BY customer_id) AS subquery;
+```
+#### Answer:
+![B2 Answer](https://user-images.githubusercontent.com/129814364/230789791-825b88d3-5224-49ce-a3ca-e8a477619b5a.JPG)
+3. For each month - how many Data Bank customers make more than 1 deposit and either 1 purchase or 1 withdrawal in a single month?
+```sql
+WITH counts AS (SELECT EXTRACT(MONTH FROM txn_date) AS month, customer_id,
+				SUM(CASE WHEN txn_type = 'deposit' THEN 1 END) AS deposit_count,
+				SUM(CASE WHEN txn_type = 'purchase' THEN 1 END) AS purchase_count,
+				SUM(CASE WHEN txn_type = 'withdrawal' THEN 1 END) AS withdrawal_count
+				FROM customer_transactions
+				GROUP BY EXTRACT(MONTH FROM txn_date), customer_id)
+SELECT month, COUNT(DISTINCT customer_id) AS customer_count
+FROM counts
+WHERE deposit_count > 1 AND (purchase_count = 1 OR withdrawal_count = 1)
+GROUP BY month;
+```
+#### Answer:
+![B3 Answer](https://user-images.githubusercontent.com/129814364/230789894-1cf20abc-cc56-4e20-b7d2-56b80d0cc63c.JPG)
+4. What is the closing balance for each customer at the end of the month?
+```sql
+WITH CTE AS (SELECT EXTRACT(MONTH FROM txn_date) AS month, customer_id,
+				SUM(CASE WHEN txn_type = 'deposit' THEN txn_amount ELSE -txn_amount END) AS monthly_amt
+				FROM customer_transactions
+				GROUP BY EXTRACT(MONTH FROM txn_date), customer_id
+				ORDER BY customer_id, month)
 
+SELECT month, customer_id, monthly_amt, SUM(monthly_amt) OVER(PARTITION BY customer_id ORDER BY customer_id ASC, month ASC) AS acct_running_total
+FROM CTE
+ORDER BY customer_id ASC, month ASC;
+```
+#### Answer:
+![B4 Answer](https://user-images.githubusercontent.com/129814364/230789933-382e569c-1191-4984-94e7-f75f9ec248cd.JPG)
+5. What is the percentage of customers who increase their closing balance by more than 5%?
+```sql
+WITH CTE AS (SELECT EXTRACT(MONTH FROM txn_date) AS month, customer_id,
+				SUM(CASE WHEN txn_type = 'deposit' THEN txn_amount ELSE -txn_amount END) AS monthly_amt
+				FROM customer_transactions
+				GROUP BY EXTRACT(MONTH FROM txn_date), customer_id
+				ORDER BY customer_id, month),
 
-3. What is the average total historical deposit counts and amounts for all customers?
-4. For each month - how many Data Bank customers make more than 1 deposit and either 1 purchase or 1 withdrawal in a single month?
-5. What is the closing balance for each customer at the end of the month?
-6. What is the percentage of customers who increase their closing balance by more than 5%?
+CTE2 AS (SELECT month, customer_id, monthly_amt, SUM(monthly_amt) OVER(PARTITION BY customer_id ORDER BY customer_id ASC, month ASC) AS acct_running_total 
+FROM CTE
+ORDER BY customer_id ASC, month ASC),
+
+CTE3 AS (SELECT month, customer_id, FIRST_VALUE(acct_running_total) OVER (PARTITION BY customer_id ORDER BY customer_id ASC, month ASC) AS first_value,
+LAST_VALUE(acct_running_total) OVER (PARTITION BY customer_id ORDER BY customer_id ASC, month ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_value
+FROM CTE
+INNER JOIN CTE2
+USING(customer_id, month)
+ORDER BY customer_id ASC, month ASC)
+
+SELECT customer_id, first_value, last_value
+FROM CTE
+INNER JOIN CTE2
+USING(customer_id, month)
+INNER JOIN CTE3
+USING(customer_id, month)
+GROUP BY customer_id, first_value, last_value
+HAVING last_value > 1.05 * first_value
+ORDER BY customer_id;
+
+SELECT DISTINCT customer_id
+FROM customer_transactions
+```
+#### Answer:
+![B5 Answer](https://user-images.githubusercontent.com/129814364/230789985-efeb2fca-8d70-4796-81b5-39236edc83d2.JPG)

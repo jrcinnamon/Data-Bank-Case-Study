@@ -106,6 +106,7 @@ GROUP BY txn_type;
 ```
 #### Answer:
 ![B1 Answer](https://user-images.githubusercontent.com/129814364/230789097-f4a4a76d-d7b0-4437-b2d6-6d218185655b.JPG)
+
 2. What is the average total historical deposit counts and amounts for all customers?
 ```sql
 SELECT ROUND(AVG(deposit_count), 2) AS avg_total_deposit_count, ROUND(AVG(deposit_amt), 2) AS avg_total_deposits

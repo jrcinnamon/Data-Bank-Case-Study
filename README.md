@@ -49,12 +49,49 @@ FROM customer_nodes;
 #### Answer:
 ![A1 Answer](https://user-images.githubusercontent.com/129814364/230783766-abfbf86f-bf6d-40f7-b90b-10e980b71174.JPG)
 
-
 2. What is the number of distinct nodes and customers per region?
+```sql
+SELECT region_name, COUNT(DISTINCT node_id) AS node_count, COUNT(DISTINCT customer_id) AS customer_count
+FROM customer_nodes
+INNER JOIN regions
+USING(region_id)
+GROUP BY region_name;
+```
+#### Answer:
+![A2 Answer](https://user-images.githubusercontent.com/129814364/230783948-da7b7322-84af-417f-a11d-f19f13b721c8.JPG)
 
 3. How many days on average are customers reallocated to a different node?
+Before answering this question, I validated the date columns in the customer_nodes table. The end_date column had 500 rows with a date of 9999-12-31, which is not correct. I excluded rows with this date when answering the question.
+```sql
+SELECT MIN(start_date), MAX(start_date), MIN(end_date), MAX(end_date)
+FROM customer_nodes;
+
+SELECT COUNT(*)
+FROM customer_nodes
+WHERE end_date = CAST('9999-12-31' AS date);
+
+SELECT ROUND(AVG(end_date - start_date), 2) AS avg_days
+FROM customer_nodes
+WHERE end_date <> CAST('9999-12-31' AS date);
+```
+#### Answer:
+![A3 Answer](https://user-images.githubusercontent.com/129814364/230784295-8e86d535-b492-408f-9725-f40bee3900a3.JPG)
 
 4. What is the median, 80th, and 95th percentile for this same reallocation days metric for each region?
+```sql
+SELECT 	region_name,
+		percentile_cont(0.5) WITHIN GROUP (ORDER BY day_range ASC) AS median,
+		percentile_cont(0.8) WITHIN GROUP (ORDER BY day_range ASC) AS percentile_80th,
+		percentile_cont(0.95) WITHIN GROUP (ORDER BY day_range ASC) AS percentile_95th
+FROM (SELECT end_date - start_date AS day_range, region_name
+	  FROM customer_nodes
+	  INNER JOIN regions
+	  USING(region_id)
+	  WHERE end_date <> CAST('9999-12-31' AS date)) AS subquery
+GROUP BY region_name;
+```
+#### Answer:
+![A4 Answer](https://user-images.githubusercontent.com/129814364/230784392-989d67cf-14a6-41e6-bfcb-3dfe57632d5b.JPG)
 
 ### B. Customer Transactions
 1. What is the unique count and total amount for each transaction type?

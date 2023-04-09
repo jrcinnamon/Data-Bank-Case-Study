@@ -65,11 +65,15 @@ Before answering this question, I validated the date columns in the customer_nod
 ```sql
 SELECT MIN(start_date), MAX(start_date), MIN(end_date), MAX(end_date)
 FROM customer_nodes;
-
+```
+![A3 Validation (1)](https://user-images.githubusercontent.com/129814364/230784847-2c26b39e-63f8-4a89-83fe-fccf8e5dfd1c.JPG)
+```sql
 SELECT COUNT(*)
 FROM customer_nodes
 WHERE end_date = CAST('9999-12-31' AS date);
-
+```
+![A3 Validation (2)](https://user-images.githubusercontent.com/129814364/230784885-b3daa26b-2419-4567-8d1b-e109755a2a05.JPG)
+```sql
 SELECT ROUND(AVG(end_date - start_date), 2) AS avg_days
 FROM customer_nodes
 WHERE end_date <> CAST('9999-12-31' AS date);
@@ -95,7 +99,15 @@ GROUP BY region_name;
 
 ### B. Customer Transactions
 1. What is the unique count and total amount for each transaction type?
-2. What is the average total historical deposit counts and amounts for all customers?
-3. For each month - how many Data Bank customers make more than 1 deposit and either 1 purchase or 1 withdrawal in a single month?
-4. What is the closing balance for each customer at the end of the month?
-5. What is the percentage of customers who increase their closing balance by more than 5%?
+```sql
+SELECT txn_type AS transaction_type, COUNT(*) AS total_count, SUM(txn_amount) AS total_amount
+FROM customer_transactions
+GROUP BY txn_type;
+```
+#### Answer:
+
+
+3. What is the average total historical deposit counts and amounts for all customers?
+4. For each month - how many Data Bank customers make more than 1 deposit and either 1 purchase or 1 withdrawal in a single month?
+5. What is the closing balance for each customer at the end of the month?
+6. What is the percentage of customers who increase their closing balance by more than 5%?

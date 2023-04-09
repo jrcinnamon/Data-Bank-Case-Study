@@ -117,6 +117,7 @@ GROUP BY customer_id) AS subquery;
 ```
 #### Answer:
 ![B2 Answer](https://user-images.githubusercontent.com/129814364/230789791-825b88d3-5224-49ce-a3ca-e8a477619b5a.JPG)
+
 3. For each month - how many Data Bank customers make more than 1 deposit and either 1 purchase or 1 withdrawal in a single month?
 ```sql
 WITH counts AS (SELECT EXTRACT(MONTH FROM txn_date) AS month, customer_id,
@@ -132,6 +133,7 @@ GROUP BY month;
 ```
 #### Answer:
 ![B3 Answer](https://user-images.githubusercontent.com/129814364/230789894-1cf20abc-cc56-4e20-b7d2-56b80d0cc63c.JPG)
+
 4. What is the closing balance for each customer at the end of the month?
 ```sql
 WITH CTE AS (SELECT EXTRACT(MONTH FROM txn_date) AS month, customer_id,
@@ -146,6 +148,7 @@ ORDER BY customer_id ASC, month ASC;
 ```
 #### Answer:
 ![B4 Answer](https://user-images.githubusercontent.com/129814364/230789933-382e569c-1191-4984-94e7-f75f9ec248cd.JPG)
+
 5. What is the percentage of customers who increase their closing balance by more than 5%?
 ```sql
 WITH CTE AS (SELECT EXTRACT(MONTH FROM txn_date) AS month, customer_id,

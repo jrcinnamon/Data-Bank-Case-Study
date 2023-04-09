@@ -47,6 +47,7 @@ SELECT DISTINCT node_id AS unique_nodes
 FROM customer_nodes;
 ```
 #### Answer:
+![A1 Answer](https://user-images.githubusercontent.com/129814364/230783766-abfbf86f-bf6d-40f7-b90b-10e980b71174.JPG)
 
 
 2. What is the number of distinct nodes and customers per region?
